@@ -12,12 +12,12 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Daily Companion · 每日陪伴</title>
-  <link rel="manifest" href="manifest.json?v=6">
+  <link rel="manifest" href="manifest.json?v=7">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <!-- 动态渐变背景 -->
@@ -120,7 +120,10 @@
 
       <div class="panel-header">
         <h3>📚 每日阅读</h3>
-        <span class="badge" id="storyCount">0</span>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <span class="badge" id="storyWeekBadge" style="background: var(--c-accent); color: white;">入门周</span>
+          <span class="badge" id="storyCount">0</span>
+        </div>
       </div>
       <div class="story-list" id="storyList">
         <div class="empty-state">今日故事加载中...</div>
@@ -283,10 +286,10 @@
   <!-- 通知 Toast -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <script src="stories.js?v=6"></script>
-  <script src="knowledge.js?v=6"></script>
-  <script src="sound.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="stories.js?v=7"></script>
+  <script src="knowledge.js?v=7"></script>
+  <script src="sound.js?v=7"></script>
+  <script src="app.js?v=7"></script>
   <script>
     // 注册 Service Worker，支持 PWA 离线访问
     if ('serviceWorker' in navigator) {

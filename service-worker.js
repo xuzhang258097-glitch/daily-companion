@@ -3,16 +3,16 @@
  * 缓存核心资源，支持离线访问
  */
 
-const CACHE_NAME = 'daily-companion-v6';
+const CACHE_NAME = 'daily-companion-v7';
 const urlsToCache = [
   '/daily-companion/',
   '/daily-companion/index.html',
-  '/daily-companion/style.css?v=6',
-  '/daily-companion/app.js?v=6',
-  '/daily-companion/stories.js?v=6',
-  '/daily-companion/knowledge.js?v=6',
-  '/daily-companion/sound.js?v=6',
-  '/daily-companion/manifest.json?v=6',
+  '/daily-companion/style.css?v=7',
+  '/daily-companion/app.js?v=7',
+  '/daily-companion/stories.js?v=7',
+  '/daily-companion/knowledge.js?v=7',
+  '/daily-companion/sound.js?v=7',
+  '/daily-companion/manifest.json?v=7',
   '/daily-companion/icon-192.png',
   '/daily-companion/icon-512.png'
 ];

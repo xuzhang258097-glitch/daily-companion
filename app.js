@@ -27,6 +27,7 @@ const App = {
     todoDone: false,
     eveningDone: false,
     lastDate: null,
+    firstUseDate: null,    // 首次使用日期，用于阅读难度递增
   },
 
   // ========== 初始化 ==========
@@ -81,8 +82,29 @@ const App = {
       this.state.growthNotes = [];
       // 待办保留，但标记为昨日
       this.state.todayTodos = this.state.todayTodos || [];
+
+      // 首次使用日期记录（用于阅读难度递增）
+      if (!this.state.firstUseDate) {
+        this.state.firstUseDate = today;
+      }
+
       this.saveState();
     }
+    // 确保首次使用日期已记录（兼容老用户）
+    if (!this.state.firstUseDate) {
+      this.state.firstUseDate = today;
+      this.saveState();
+    }
+  },
+
+  // 计算当前学习周数（从0开始）
+  getLearningWeek() {
+    if (!this.state.firstUseDate) return 0;
+    const first = new Date(this.state.firstUseDate);
+    const now = new Date();
+    const diffMs = now - first;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return Math.floor(diffDays / 7);
   },
 
   // ========== UI 初始化 ==========
@@ -831,8 +853,16 @@ const App = {
   // ========== 阅读专区 ==========
   initReading() {
     if (typeof StoriesDB === 'undefined') return;
-    const stories = StoriesDB.getTodayStories();
+    const week = this.getLearningWeek();
+    const stories = StoriesDB.getTodayStories(week);
+    const weekInfo = StoriesDB.getWeekInfo(week);
+
     document.getElementById('storyCount').textContent = stories.length;
+
+    // 更新侧边栏难度徽章
+    const badge = document.getElementById('storyWeekBadge');
+    if (badge) badge.textContent = weekInfo.label;
+
     this.renderSideStoryList(stories);
   },
 
@@ -858,7 +888,8 @@ const App = {
 
   openReadingModal() {
     document.getElementById('readingModal').classList.add('show');
-    this.renderStoryList();
+    const week = this.getLearningWeek();
+    this.renderStoryList(week);
     SoundSystem.playOpen();
   },
 
@@ -868,10 +899,21 @@ const App = {
     SoundSystem.playClose();
   },
 
-  renderStoryList() {
+  renderStoryList(week = 0) {
     if (typeof StoriesDB === 'undefined') return;
-    const stories = StoriesDB.getTodayStories();
+    const stories = StoriesDB.getTodayStories(week);
+    const weekInfo = StoriesDB.getWeekInfo(week);
     const grid = document.getElementById('readingStoriesGrid');
+
+    // 更新介绍文字
+    const intro = document.querySelector('.reading-intro');
+    if (intro) {
+      intro.innerHTML = `
+        <p>${weekInfo.description}</p>
+        <p class="reading-tip">第 ${weekInfo.week} 周 · ${weekInfo.label} · 点击任意单词即可查看释义和发音</p>
+      `;
+    }
+
     grid.innerHTML = stories.map((s, i) => `
       <div class="story-card" data-index="${i}">
         <div class="story-card-title">${s.title}</div>

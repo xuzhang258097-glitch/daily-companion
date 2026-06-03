@@ -85,6 +85,46 @@ const StoriesDB = {
       level: "中级",
       wordCount: 158,
       content: `Behind her grandmother's cottage, Anna found a rusty iron key under an old stone. Curious, she searched the overgrown backyard until she found a small wooden door covered in thick ivy. The key fit perfectly! Behind the door lay a forgotten garden. Wild roses climbed the crumbling walls, lavender filled the air with sweetness, and butterflies danced in the afternoon sun. But the garden was dry and thirsty. Every day that summer, Anna carried water from the well and pulled out weeds. Slowly, the flowers perked up and bloomed brighter than ever. On Grandmother's birthday, Anna led her through the ivy door. The old woman gasped with wonder. "This was my secret garden when I was a girl," she whispered, tears in her eyes. "I thought I had lost it forever."`
+    },
+    {
+      id: 11,
+      title: "My New Shoes",
+      titleCn: "我的新鞋子",
+      level: "初级",
+      wordCount: 98,
+      content: `Today is a very special day for Sam. His mother bought him a new pair of red shoes. They are bright and shiny. Sam put them on and ran around the living room. "They are so light and fast!" he shouted with joy. He ran outside to show his friends. Billy and Kate looked at his new shoes. "Wow, they are beautiful!" Billy said. Sam smiled proudly. They all played tag in the park together. Sam ran faster than ever before. At bedtime, Sam took off his shoes and placed them carefully by his bed. "Thank you, Mom," he whispered. He could not wait to wear them again tomorrow.`
+    },
+    {
+      id: 12,
+      title: "The Hungry Bird",
+      titleCn: "饥饿的小鸟",
+      level: "初级",
+      wordCount: 112,
+      content: `A little blue bird woke up early one spring morning. Her tummy was making a loud rumbling sound. She was very hungry. She flew from branch to branch, looking for something to eat. She found a few small seeds on the ground, but a squirrel grabbed them first. She felt sad. Then she saw a bright red berry bush near the old fence. She flew over and ate one sweet berry. Then another, and another! The berries were so juicy and delicious. Her tummy was full and happy. She sang a beautiful song to thank the berry bush. A gentle wind blew through the leaves, and the bird knew it was going to be a lovely day.`
+    },
+    {
+      id: 13,
+      title: "A Sunny Day",
+      titleCn: "晴朗的一天",
+      level: "初级",
+      wordCount: 105,
+      content: `It was a warm and sunny Saturday. Lily and her brother Max decided to have a picnic in the garden. Max packed some sandwiches and juice boxes. Lily brought her favorite teddy bear and a colorful blanket. They spread the blanket under the big apple tree. The grass was soft and green. A yellow butterfly landed on Lily's hand. She giggled softly so she would not scare it away. Max shared his sandwich with a friendly ant. After lunch, they lay on the blanket and watched the white clouds move slowly across the blue sky. "This is the best day ever," Lily said, holding her brother's hand.`
+    },
+    {
+      id: 14,
+      title: "The Red Balloon",
+      titleCn: "红气球",
+      level: "初级",
+      wordCount: 118,
+      content: `At the town fair, Dad bought Emma a big red balloon. It was as round as the moon and brighter than a cherry. Emma held the string tightly with her small hand. She walked carefully so the balloon would not touch any sharp corners. Suddenly, a strong gust of wind blew. The string slipped from her fingers! "Oh no!" Emma cried. The red balloon floated higher and higher into the sky. Emma's eyes filled with tears. Dad knelt down and wiped her cheek. "Look, Emma," he said softly. The balloon was dancing with the white clouds. "It is going on an adventure. Maybe it will visit the moon." Emma smiled. She waved goodbye to her brave little balloon.`
+    },
+    {
+      id: 15,
+      title: "Baby Rabbit",
+      titleCn: "小兔子",
+      level: "初级",
+      wordCount: 102,
+      content: `In a soft grassy meadow, a baby rabbit named Coco opened her eyes for the very first time. Everything was new and wonderful. She saw green grass, yellow flowers, and a bright blue sky. Coco tried to stand on her tiny legs. She wobbled and fell, but she tried again. Her mother watched with warm, proud eyes. "Take your time, little one," she said. Coco hopped forward one small step. Then another. Soon she was hopping around the meadow like a happy spring. She found a crunchy carrot and nibbled it with her small white teeth. It was the tastiest thing she had ever eaten. Coco was ready to explore the big, beautiful world.`
     }
   ],
 
@@ -258,12 +298,56 @@ const StoriesDB = {
     "wrapped": { phonetic: "/ræpt/", meaning: "包裹" }
   },
 
-  // 根据日期伪随机选取10篇故事
-  getTodayStories() {
+  // 根据日期和学习周数伪随机选取10篇故事
+  // week: 0=第1周(入门), 1=第2周(进阶), 2+=第3周+(挑战)
+  getTodayStories(week = 0) {
     const today = new Date().toDateString();
-    const seed = this._hashString(today);
-    const shuffled = this._shuffleWithSeed([...this.stories], seed);
+    const seed = this._hashString(today + week);
+
+    let pool;
+    if (week === 0) {
+      // 第1周：只推送初级故事（10篇）
+      pool = this.stories.filter(s => s.level === '初级');
+    } else if (week === 1) {
+      // 第2周：初级70% + 中级30%，共10篇
+      const primary = this.stories.filter(s => s.level === '初级');
+      const medium = this.stories.filter(s => s.level === '中级');
+      const shuffledPrimary = this._shuffleWithSeed([...primary], seed);
+      const shuffledMedium = this._shuffleWithSeed([...medium], seed + 1);
+      pool = [
+        ...shuffledPrimary.slice(0, 7),
+        ...shuffledMedium.slice(0, 3)
+      ];
+    } else {
+      // 第3周起：初级30% + 中级70%
+      const primary = this.stories.filter(s => s.level === '初级');
+      const medium = this.stories.filter(s => s.level === '中级');
+      const shuffledPrimary = this._shuffleWithSeed([...primary], seed);
+      const shuffledMedium = this._shuffleWithSeed([...medium], seed + 1);
+      pool = [
+        ...shuffledPrimary.slice(0, 3),
+        ...shuffledMedium.slice(0, 7)
+      ];
+    }
+
+    const shuffled = this._shuffleWithSeed([...pool], seed + 99);
     return shuffled.slice(0, Math.min(10, shuffled.length));
+  },
+
+  // 获取本周难度信息
+  getWeekInfo(week = 0) {
+    const labels = ['入门周', '进阶周', '挑战周'];
+    const descs = [
+      '本周为你精选10篇初级故事，轻松开启英文阅读之旅～',
+      '本周初级70% + 中级30%，难度逐步提升，继续加油！',
+      '本周初级30% + 中级70%，挑战更高难度，你能行！'
+    ];
+    const w = Math.min(week, 2);
+    return {
+      week: week + 1,
+      label: labels[w],
+      description: descs[w]
+    };
   },
 
   // 查词
