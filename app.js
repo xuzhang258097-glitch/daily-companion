@@ -39,6 +39,9 @@ const App = {
     this.updateLiveTime();
     setInterval(() => this.updateLiveTime(), 1000);
 
+    // 初始化阅读专区
+    this.initReading();
+
     // 首次音效初始化（需用户交互后）
     const initSound = () => {
       SoundSystem.init();
@@ -199,6 +202,28 @@ const App = {
         }, 300);
       });
     }
+
+    // 阅读面板事件
+    document.getElementById('btnOpenReading').addEventListener('click', () => this.openReadingModal());
+    document.getElementById('btnCloseReading').addEventListener('click', () => this.closeReadingModal());
+    document.getElementById('btnBackToList').addEventListener('click', () => this.showStoryList());
+    document.getElementById('readingModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) this.closeReadingModal();
+    });
+
+    // 单词发音按钮
+    const tooltipSpeaker = document.getElementById('tooltipSpeaker');
+    if (tooltipSpeaker) {
+      tooltipSpeaker.addEventListener('click', () => this.speakTooltipWord());
+    }
+
+    // 点击页面其他地方关闭查词卡片
+    document.addEventListener('click', (e) => {
+      const tooltip = document.getElementById('wordTooltip');
+      if (tooltip && !tooltip.contains(e.target) && !e.target.classList.contains('story-word')) {
+        tooltip.classList.remove('show');
+      }
+    });
   },
 
   // ========== 定时调度器 ==========
@@ -801,6 +826,181 @@ const App = {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  },
+
+  // ========== 阅读专区 ==========
+  initReading() {
+    if (typeof StoriesDB === 'undefined') return;
+    const stories = StoriesDB.getTodayStories();
+    document.getElementById('storyCount').textContent = stories.length;
+    this.renderSideStoryList(stories);
+  },
+
+  renderSideStoryList(stories) {
+    const container = document.getElementById('storyList');
+    if (!stories || stories.length === 0) {
+      container.innerHTML = '<div class="empty-state">今日暂无故事</div>';
+      return;
+    }
+    container.innerHTML = stories.map((s, i) => `
+      <div class="story-item" data-index="${i}">
+        <div class="story-item-title">${i + 1}. ${s.titleCn}</div>
+        <div class="story-item-meta">${s.level} · ${s.wordCount}词</div>
+      </div>
+    `).join('');
+    container.querySelectorAll('.story-item').forEach((el, i) => {
+      el.addEventListener('click', () => {
+        this.openReadingModal();
+        this.showStory(i);
+      });
+    });
+  },
+
+  openReadingModal() {
+    document.getElementById('readingModal').classList.add('show');
+    this.renderStoryList();
+    SoundSystem.playOpen();
+  },
+
+  closeReadingModal() {
+    document.getElementById('readingModal').classList.remove('show');
+    document.getElementById('wordTooltip').classList.remove('show');
+    SoundSystem.playClose();
+  },
+
+  renderStoryList() {
+    if (typeof StoriesDB === 'undefined') return;
+    const stories = StoriesDB.getTodayStories();
+    const grid = document.getElementById('readingStoriesGrid');
+    grid.innerHTML = stories.map((s, i) => `
+      <div class="story-card" data-index="${i}">
+        <div class="story-card-title">${s.title}</div>
+        <div class="story-card-title-cn">${s.titleCn}</div>
+        <div class="story-card-meta">
+          <span class="story-level">${s.level}</span>
+          <span class="story-words">${s.wordCount} 词</span>
+        </div>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.story-card').forEach((el, i) => {
+      el.addEventListener('click', () => this.showStory(i));
+    });
+  },
+
+  showStoryList() {
+    document.getElementById('readingStoryList').style.display = 'block';
+    document.getElementById('readingStoryView').style.display = 'none';
+  },
+
+  showStory(index) {
+    if (typeof StoriesDB === 'undefined') return;
+    const stories = StoriesDB.getTodayStories();
+    const story = stories[index];
+    if (!story) return;
+
+    this.currentStoryIndex = index;
+    this.currentStory = story;
+
+    document.getElementById('readingStoryList').style.display = 'none';
+    document.getElementById('readingStoryView').style.display = 'block';
+
+    document.getElementById('storyMeta').innerHTML = `
+      <h2>${story.title}</h2>
+      <div class="story-meta-line">
+        <span class="story-badge level">${story.level}</span>
+        <span class="story-badge words">${story.wordCount} 词</span>
+        <span class="story-badge index">${index + 1} / ${stories.length}</span>
+      </div>
+    `;
+
+    this.renderStoryContent(story.content);
+    this.updateStoryProgress(0);
+  },
+
+  renderStoryContent(text) {
+    const container = document.getElementById('storyContent');
+    // 将文本按句子分割，每句一个段落
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+    container.innerHTML = sentences.map(sentence => {
+      const trimmed = sentence.trim();
+      // 将句子中的每个单词包裹为可点击元素
+      const wordsHtml = trimmed.split(/\s+/).map(word => {
+        const clean = word.replace(/[^a-zA-Z']/g, '');
+        const punct = word.replace(/[a-zA-Z']/g, '');
+        const hasVocab = clean && StoriesDB.lookup(clean);
+        const cls = hasVocab ? 'story-word has-vocab' : 'story-word';
+        return `<span class="${cls}" data-word="${clean}">${word}</span>${punct ? '<span class="story-punct">' + punct + '</span>' : ''}`;
+      }).join(' ');
+      return `<p class="story-paragraph">${wordsHtml}</p>`;
+    }).join('');
+
+    // 绑定单词点击事件
+    container.querySelectorAll('.story-word').forEach(el => {
+      el.addEventListener('click', (e) => this.onWordClick(e));
+    });
+
+    // 滚动监听更新进度
+    container.onscroll = () => {
+      const scrollPercent = container.scrollTop / (container.scrollHeight - container.clientHeight);
+      this.updateStoryProgress(Math.round(scrollPercent * 100));
+    };
+  },
+
+  onWordClick(e) {
+    e.stopPropagation();
+    const word = e.target.dataset.word;
+    if (!word) return;
+
+    const info = StoriesDB.lookup(word);
+    const tooltip = document.getElementById('wordTooltip');
+    const wordEl = document.getElementById('tooltipWord');
+    const phoneticEl = document.getElementById('tooltipPhonetic');
+    const meaningEl = document.getElementById('tooltipMeaning');
+
+    wordEl.textContent = word;
+
+    if (info) {
+      phoneticEl.textContent = info.phonetic;
+      meaningEl.textContent = info.meaning;
+      tooltip.classList.add('has-data');
+    } else {
+      phoneticEl.textContent = '';
+      meaningEl.textContent = '暂无释义，建议查阅词典';
+      tooltip.classList.remove('has-data');
+    }
+
+    this.currentTooltipWord = word;
+
+    // 定位浮动卡片
+    const rect = e.target.getBoundingClientRect();
+    const tooltipHeight = 100;
+    let top = rect.top - tooltipHeight - 8;
+    if (top < 10) top = rect.bottom + 8;
+
+    tooltip.style.left = `${Math.max(10, Math.min(window.innerWidth - 220, rect.left + rect.width / 2 - 110))}px`;
+    tooltip.style.top = `${top + window.scrollY}px`;
+    tooltip.classList.add('show');
+  },
+
+  speakTooltipWord() {
+    const word = this.currentTooltipWord;
+    if (!word) return;
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(word);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    } else {
+      this.showToast('您的设备不支持语音播放');
+    }
+  },
+
+  updateStoryProgress(percent) {
+    const fill = document.getElementById('storyProgressFill');
+    const text = document.getElementById('storyProgressText');
+    if (fill) fill.style.width = `${Math.min(100, percent)}%`;
+    if (text) text.textContent = `阅读进度 ${Math.min(100, percent)}%`;
   }
 };
 
