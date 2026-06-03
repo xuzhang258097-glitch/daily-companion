@@ -104,6 +104,11 @@ const App = {
     const sendBtn = document.getElementById('btnSend');
 
     sendBtn.addEventListener('click', () => this.handleUserInput());
+    // 移动端兼容：同时监听 touchend 防止点击失效
+    sendBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      this.handleUserInput();
+    });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') this.handleUserInput();
     });
@@ -455,7 +460,11 @@ const App = {
   handleUserInput() {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
-    if (!text) return;
+    if (!text) {
+      this.showToast('请先输入内容再发送哦～');
+      input.focus();
+      return;
+    }
 
     input.value = '';
     this.sendUserMessage(text);

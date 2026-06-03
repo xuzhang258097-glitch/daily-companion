@@ -758,8 +758,8 @@ body {
 }
 
 .btn-send {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   background: linear-gradient(135deg, var(--c-primary), var(--c-primary-light));
@@ -770,6 +770,10 @@ body {
   justify-content: center;
   transition: all 0.3s var(--ease-spring);
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .btn-send:hover {
@@ -779,6 +783,13 @@ body {
 
 .btn-send:active {
   transform: scale(0.95);
+}
+
+@media (max-width: 900px) {
+  .btn-send {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* 快捷回复 */
