@@ -472,15 +472,49 @@ const App = {
   },
 
   handleFreeChat(text) {
-    // 自由聊天回应
-    const responses = [
-      '收到！随时都可以找我聊天哦～',
-      '嗯嗯，我在听呢 👂',
-      '有什么我可以帮你的吗？',
-      '今天过得怎么样？'
-    ];
+    // ===== 语义意图识别（按优先级排序）=====
 
-    // 关键词回应
+    // 1. 天气查询
+    if (/天气|气温|温度|下雨|下雪|雾霾|空气质量/.test(text)) {
+      this.sendAIMessage('☁️ 抱歉，我目前还没有接入实时天气数据，没法帮你查天气～推荐用系统天气 App 或搜索引擎查看哦！');
+      return;
+    }
+
+    // 2. 时间/日期查询
+    if (/几点|现在时间|今天几号|星期几|日期/.test(text)) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const dateStr = now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+      this.sendAIMessage(`🕐 现在是 <strong>${timeStr}</strong>，${dateStr}。`);
+      return;
+    }
+
+    // 3. 问候/打招呼
+    if (/^(你好|您好|嗨|hello|hi|在吗|在嘛)\s*[.!?！？]*$/i.test(text)) {
+      this.sendAIMessage('你好呀！我是小伴，有什么我可以帮你的吗？😊');
+      return;
+    }
+
+    // 4. 询问能力/身份
+    if (/你能做什么|你是谁|你有什么功能|你会什么/.test(text)) {
+      this.sendAIMessage('我是 <strong>小伴</strong>，你的全天候陪伴助手！我可以：<br>📖 每天推送知识卡片（单词、科技、历史、影视）<br>📝 帮你记录和管理待办事项<br>🌙 晚间陪你复盘成长<br>💬 随时陪你聊天<br><br>试试输入「知识」或「待办」体验一下吧～');
+      return;
+    }
+
+    // 5. 表达感谢
+    if (/谢谢|感谢|多谢/.test(text)) {
+      this.sendAIMessage('不客气呀！能帮到你我很开心～随时找我 ✨');
+      return;
+    }
+
+    // 6. 表达负面情绪
+    if (/难过|伤心|累|烦|不开心|郁闷|焦虑/.test(text)) {
+      this.sendAIMessage('抱抱你 🤗 每个人都有低落的时候，允许自己休息一会儿。如果想聊聊，我随时在听；如果想转移注意力，我可以给你推送一条有趣的知识～');
+      this.setQuickReplies(['推送知识', '我想静静', '谢谢小伴']);
+      return;
+    }
+
+    // ===== 关键词回应（原有功能）=====
     if (text.includes('知识') || text.includes('学习')) {
       this.sendAIMessage('想学习的话，我可以随时为你推送知识卡片！想学什么类型的？');
       this.setQuickReplies(['英文单词', '科技资讯', '历史知识', '影视动画']);
@@ -515,10 +549,8 @@ const App = {
       return;
     }
 
-    const response = responses[Math.floor(Math.random() * responses.length)];
-    setTimeout(() => {
-      this.sendAIMessage(response);
-    }, 600 + Math.random() * 400);
+    // ===== 兜底回复（不再随机乱答）=====
+    this.sendAIMessage('我在听呢 👂 不过这个问题我暂时还没学会怎么回答～你可以试试问我「天气」「时间」「知识」「待办」相关的内容，或者点击下方的快捷回复按钮。');
   },
 
   // ========== 消息系统 ==========
