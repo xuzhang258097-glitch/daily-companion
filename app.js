@@ -178,6 +178,27 @@ const App = {
     document.getElementById('reviewModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) this.closeReviewModal();
     });
+
+    // 移动端键盘弹出适配
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    if (chatInput && chatMessages) {
+      chatInput.addEventListener('focus', () => {
+        // 输入框聚焦时，延迟滚动到底部，确保键盘弹出后消息可见
+        setTimeout(() => {
+          this.scrollToBottom();
+          // iOS 上滚动输入框到可视区域
+          if ('visualViewport' in window) {
+            const vv = window.visualViewport;
+            const inputRect = chatInput.getBoundingClientRect();
+            const keyboardTop = vv.height + vv.offsetTop;
+            if (inputRect.bottom > keyboardTop - 20) {
+              window.scrollBy(0, inputRect.bottom - keyboardTop + 80);
+            }
+          }
+        }, 300);
+      });
+    }
   },
 
   // ========== 定时调度器 ==========
