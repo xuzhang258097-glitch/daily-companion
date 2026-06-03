@@ -261,14 +261,35 @@ const App = {
     const hour = now.getHours();
     const minute = now.getMinutes();
 
-    // 09:00 晨间知识
+    // 09:00 晨间知识（如果页面正好开着）
     if (hour === 9 && minute === 0 && !this.state.morningDone) {
-      this.triggerMorningFlow();
+      this.sendAIMessage('🌅 早上九点啦！小咪来陪你开启今天的学习时光～');
+      setTimeout(() => this.proactivePush(hour), 1500);
     }
 
-    // 18:00 晚间复盘
+    // 12:00 午间问候（如果页面正好开着）
+    if (hour === 12 && minute === 0) {
+      this.sendAIMessage('☀️ 中午十二点啦！上午过得怎么样？记得休息一下哦～');
+    }
+
+    // 15:00 下午提醒（如果页面正好开着）
+    if (hour === 15 && minute === 0) {
+      const todoCount = this.state.todayTodos.length;
+      const doneCount = this.state.todayTodos.filter(t => t.done).length;
+      if (todoCount > 0 && doneCount < todoCount) {
+        this.sendAIMessage(`🌤️ 下午三点啦！今日待办还有 <strong>${todoCount - doneCount}</strong> 项未完成，加油！`);
+      }
+    }
+
+    // 18:00 晚间复盘（如果页面正好开着）
     if (hour === 18 && minute === 0 && !this.state.eveningDone) {
-      this.triggerEveningFlow();
+      this.sendAIMessage('🌙 晚上六点啦！来做一下晚间复盘吧～');
+      setTimeout(() => this.triggerEveningFlow(), 2000);
+    }
+
+    // 22:00 晚安提醒（如果页面正好开着）
+    if (hour === 22 && minute === 0) {
+      this.sendAIMessage('🌙 晚上十点啦！该准备休息咯，明天见～');
     }
 
     this.updateTimeline();
@@ -310,24 +331,100 @@ const App = {
   showWelcomeBack() {
     const hour = new Date().getHours();
     let greeting = '你好呀';
-    if (hour < 12) greeting = '早上好';
+    if (hour < 6) greeting = '晚上好';
+    else if (hour < 12) greeting = '早上好';
     else if (hour < 18) greeting = '下午好';
     else greeting = '晚上好';
 
-    const messages = [
-      `${greeting}！我是 <strong>小咪</strong>，你的全天候陪伴助手 ✨`,
-      `我会每天准时陪你聊天、推送知识、记录待办、晚间复盘。`,
-      `现在时间是 <strong>${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</strong>，让我们一起度过美好的一天吧～`
-    ];
+    // 基础欢迎语
+    this.sendAIMessage(`${greeting}！我是 <strong>小咪</strong>，你的全天候陪伴助手 ✨<br>现在时间是 <strong>${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</strong>，让我们一起度过美好的一天吧～`, { delay: 500 });
+    SoundSystem.playAmbient();
 
-    // 检查今日进度
-    const doneCount = [this.state.morningDone, this.state.todoDone, this.state.eveningDone].filter(Boolean).length;
-    if (doneCount > 0) {
-      messages.push(`今日已完成 <strong>${doneCount}/3</strong> 个陪伴任务，继续加油！`);
+    // 根据时间段主动推送内容
+    setTimeout(() => this.proactivePush(hour), 1800);
+  },
+
+  // 根据时间段主动推送
+  proactivePush(hour) {
+    // 早上 6-11点：推送晨间知识（如果还没做过）
+    if (hour >= 6 && hour < 12 && !this.state.morningDone) {
+      this.sendAIMessage('🌅 新的一天开始啦！我为你准备了今日的知识卡片，一起来看看吧～');
+      setTimeout(() => {
+        const knowledge = KnowledgeDB.getAllToday();
+        this.showKnowledgeCard(knowledge.word);
+        this.state.knowledgeLearned = Object.values(knowledge);
+        this.state.morningDone = true;
+        this.saveState();
+      }, 1200);
+      setTimeout(() => {
+        this.showKnowledgeCard(KnowledgeDB.getAllToday().tech);
+      }, 3500);
+      setTimeout(() => {
+        this.sendAIMessage('还想继续学习吗？我可以再给你推送历史或影视知识，也可以去左侧面板看看今日的英文小故事 📚');
+        this.setQuickReplies(['历史知识', '影视动画', '看看故事', '先忙了']);
+      }, 5500);
+      return;
     }
 
-    this.sendAIMessage(messages.join('<br>'), { delay: 500 });
-    SoundSystem.playAmbient();
+    // 中午 12-14点：推送知识 + 问候
+    if (hour >= 12 && hour < 15) {
+      const todoCount = this.state.todayTodos.length;
+      const doneCount = this.state.todayTodos.filter(t => t.done).length;
+      if (todoCount > 0 && doneCount < todoCount) {
+        this.sendAIMessage(`☀️ 中午好！上午过得怎么样？你今日还有 <strong>${todoCount - doneCount}</strong> 项待办没完成哦，加油！`);
+      } else {
+        this.sendAIMessage('☀️ 中午好！上午过得怎么样？来学点新知识提提神吧～');
+        setTimeout(() => {
+          const history = KnowledgeDB.getToday('history');
+          this.showKnowledgeCard(history);
+        }, 1500);
+      }
+      return;
+    }
+
+    // 下午 15-17点：推送知识 + 待办提醒
+    if (hour >= 15 && hour < 18) {
+      const todoCount = this.state.todayTodos.length;
+      const doneCount = this.state.todayTodos.filter(t => t.done).length;
+      if (todoCount === 0) {
+        this.sendAIMessage('🌤️ 下午好！今天还没有添加待办事项呢，要不要现在规划一下？');
+        this.setQuickReplies(['添加待办', '先学知识', '待会儿再说']);
+      } else if (doneCount < todoCount) {
+        this.sendAIMessage(`🌤️ 下午好！今日待办完成了 <strong>${doneCount}/${todoCount}</strong> 项，继续加油！学点新知识放松一下？`);
+        setTimeout(() => {
+          const movie = KnowledgeDB.getToday('movies');
+          this.showKnowledgeCard(movie);
+        }, 2000);
+      } else {
+        this.sendAIMessage('🌤️ 下午好！今天的待办都完成了，太棒了！来学点新知识奖励一下自己～');
+        setTimeout(() => {
+          const movie = KnowledgeDB.getToday('movies');
+          this.showKnowledgeCard(movie);
+        }, 1500);
+      }
+      return;
+    }
+
+    // 晚上 18-21点：晚间复盘（如果还没做过）
+    if (hour >= 18 && hour < 22 && !this.state.eveningDone) {
+      this.sendAIMessage('🌙 晚上好！忙碌的一天快要结束了，来做一下晚间复盘吧～');
+      setTimeout(() => {
+        this.triggerEveningFlow();
+      }, 2000);
+      return;
+    }
+
+    // 深夜 22-5点：晚安问候
+    if (hour >= 22 || hour < 6) {
+      this.sendAIMessage('🌙 夜深了，早点休息吧！明天小咪还会准时来陪你～晚安 ✨');
+      return;
+    }
+
+    // 如果晨间已做但用户再次打开（比如刷新页面），给点新内容
+    if (this.state.morningDone && hour < 18) {
+      this.sendAIMessage('欢迎回来！今天想聊点什么？我可以给你推送知识、讲英文故事，或者帮你记录待办～');
+      this.setQuickReplies(['推送知识', '英文故事', '添加待办', '随便聊聊']);
+    }
   },
 
   // ========== 晨间流程 ==========
@@ -591,20 +688,9 @@ const App = {
       return;
     }
 
-    // ===== 关键词回应（原有功能）=====
-    if (text.includes('知识') || text.includes('学习')) {
-      this.sendAIMessage('想学习的话，我可以随时为你推送知识卡片！想学什么类型的？');
-      this.setQuickReplies(['英文单词', '科技资讯', '历史知识', '影视动画']);
-      return;
-    }
-    if (text.includes('待办') || text.includes('todo')) {
-      this.sendAIMessage('待办事项在左侧面板可以看到，也可以直接在这里告诉我新的待办哦！');
-      return;
-    }
-    if (text.includes('复盘') || text.includes('总结')) {
-      this.sendAIMessage('复盘记录可以在右上角 📋 按钮查看。需要我现在帮你总结一下吗？');
-      return;
-    }
+    // ===== 关键词回应（按优先级排序）=====
+
+    // 1. 具体领域知识（必须在"知识"之前，避免"历史知识"被"知识"拦截）
     if (text.includes('单词') || text.includes('英语')) {
       const word = KnowledgeDB.getToday('words');
       this.showKnowledgeCard(word);
@@ -626,8 +712,39 @@ const App = {
       return;
     }
 
-    // ===== 兜底回复（不再随机乱答）=====
-    this.sendAIMessage('我在听呢 👂 不过这个问题我暂时还没学会怎么回答～你可以试试问我「天气」「时间」「知识」「待办」相关的内容，或者点击下方的快捷回复按钮。');
+    // 2. 解释/科普请求
+    if (/解释|什么意思|什么含义|给我讲讲|科普一下/.test(text)) {
+      this.sendAIMessage('你想了解哪个词或哪个知识点呢？可以直接告诉我具体内容，比如「Vellichor 是什么意思」，或者点击下方的快捷回复选择类型～');
+      this.setQuickReplies(['英文单词', '科技资讯', '历史知识', '影视动画']);
+      return;
+    }
+
+    // 3. 阅读/故事
+    if (text.includes('故事') || text.includes('阅读') || text.includes('英文故事')) {
+      this.sendAIMessage('📚 好呀！我为你准备了今日的趣味英文小故事，点击左侧面板的「开始阅读」或下方的按钮即可进入阅读专区～');
+      this.setQuickReplies(['开始阅读', '待会儿再看']);
+      return;
+    }
+
+    // 4. 泛指学习/知识
+    if (text.includes('知识') || text.includes('学习')) {
+      this.sendAIMessage('想学习的话，我可以随时为你推送知识卡片！想学什么类型的？');
+      this.setQuickReplies(['英文单词', '科技资讯', '历史知识', '影视动画']);
+      return;
+    }
+
+    // 5. 待办/复盘
+    if (text.includes('待办') || text.includes('todo')) {
+      this.sendAIMessage('待办事项在左侧面板可以看到，也可以直接在这里告诉我新的待办哦！');
+      return;
+    }
+    if (text.includes('复盘') || text.includes('总结')) {
+      this.sendAIMessage('复盘记录可以在右上角 📋 按钮查看。需要我现在帮你总结一下吗？');
+      return;
+    }
+
+    // ===== 兜底回复 =====
+    this.sendAIMessage('我在听呢 👂 不过这个问题我暂时还没学会怎么回答～你可以试试问我「天气」「时间」「知识」「待办」「故事」相关的内容，或者点击下方的快捷回复按钮。');
   },
 
   // ========== 消息系统 ==========
