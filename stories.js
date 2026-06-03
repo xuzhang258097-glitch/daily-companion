@@ -12,7 +12,8 @@ const StoriesDB = {
       titleCn: "聪明的狐狸",
       level: "初级",
       wordCount: 128,
-      content: `Once upon a time, there was a clever fox living in a big green forest. He was very hungry one hot summer day. He walked around looking for food. Suddenly, he saw a crow sitting on a tall tree branch. The crow had a big piece of cheese in her beak. The fox wanted that cheese very much. He looked up at the crow and said, "Good morning, beautiful bird! Your feathers are so shiny today. You must have the most lovely voice in the whole forest. Could you sing a song for me?" The silly crow opened her beak to sing. Down fell the cheese! The clever fox caught it and ran away with a big smile.`
+      content: ,
+      cnContent: `Once upon a time, there was a clever fox living in a big green forest. He was very hungry one hot summer day. He walked around looking for food. Suddenly, he saw a crow sitting on a tall tree branch. The crow had a big piece of cheese in her beak. The fox wanted that cheese very much. He looked up at the crow and said, "Good morning, beautiful bird! Your feathers are so shiny today. You must have the most lovely voice in the whole forest. Could you sing a song for me?" The silly crow opened her beak to sing. Down fell the cheese! The clever fox caught it and ran away with a big smile.`
     },
     {
       id: 2,
@@ -20,7 +21,8 @@ const StoriesDB = {
       titleCn: "幸运便士",
       level: "初级",
       wordCount: 135,
-      content: `Little Tom was walking home from school on a rainy afternoon. He felt sad because he failed his math test. As he kicked a stone along the road, something shiny caught his eye. It was a bright copper penny lying in a small puddle. Tom picked it up and wiped it clean. "Find a penny, pick it up, and all day long you'll have good luck," he whispered the old rhyme. The next morning, Tom studied hard for his spelling test. He remembered every single word! When the teacher gave back the papers, Tom got a perfect score. He smiled and touched the lucky penny in his pocket.`
+      content: ,
+      cnContent: `Little Tom was walking home from school on a rainy afternoon. He felt sad because he failed his math test. As he kicked a stone along the road, something shiny caught his eye. It was a bright copper penny lying in a small puddle. Tom picked it up and wiped it clean. "Find a penny, pick it up, and all day long you'll have good luck," he whispered the old rhyme. The next morning, Tom studied hard for his spelling test. He remembered every single word! When the teacher gave back the papers, Tom got a perfect score. He smiled and touched the lucky penny in his pocket.`
     },
     {
       id: 3,
@@ -28,7 +30,8 @@ const StoriesDB = {
       titleCn: "迷路的小猫",
       level: "初级",
       wordCount: 142,
-      content: `Emily heard a soft crying sound behind the garden fence. She tiptoed closer and found a tiny orange kitten with big scared eyes. It was shivering in the cold wind. "Don't be afraid, little one," Emily said gently. She wrapped the kitten in her warm scarf and carried it home. Her mother helped her make a cozy bed from an old shoebox and a soft towel. Emily gave the kitten some warm milk. The kitten purred happily and fell asleep in her lap. Three days later, they found the owner, but the kind lady said Emily could keep the kitten. Emily named him Pumpkin, and they became best friends forever.`
+      content: ,
+      cnContent: `Emily heard a soft crying sound behind the garden fence. She tiptoed closer and found a tiny orange kitten with big scared eyes. It was shivering in the cold wind. "Don't be afraid, little one," Emily said gently. She wrapped the kitten in her warm scarf and carried it home. Her mother helped her make a cozy bed from an old shoebox and a soft towel. Emily gave the kitten some warm milk. The kitten purred happily and fell asleep in her lap. Three days later, they found the owner, but the kind lady said Emily could keep the kitten. Emily named him Pumpkin, and they became best friends forever.`
     },
     {
       id: 4,
@@ -36,7 +39,8 @@ const StoriesDB = {
       titleCn: "魔法的种子",
       level: "中级",
       wordCount: 156,
-      content: `Old Mr. Green gave his grandson Ben a small brown seed. "Plant this in your garden and water it every day," he said with a mysterious smile. "But you must be patient." Ben dug a little hole and placed the seed carefully in the soil. Every morning, he watered it and watched. A week passed, then two. Nothing happened. Ben wanted to give up, but his grandfather's words echoed in his mind. On the twenty-first day, a tiny green sprout pushed through the earth! Ben jumped with joy. By summer, the seed had grown into a tall sunflower taller than Ben himself. "Patience is magic," Grandpa said, patting his shoulder.`
+      content: ,
+      cnContent: `Old Mr. Green gave his grandson Ben a small brown seed. "Plant this in your garden and water it every day," he said with a mysterious smile. "But you must be patient." Ben dug a little hole and placed the seed carefully in the soil. Every morning, he watered it and watched. A week passed, then two. Nothing happened. Ben wanted to give up, but his grandfather's words echoed in his mind. On the twenty-first day, a tiny green sprout pushed through the earth! Ben jumped with joy. By summer, the seed had grown into a tall sunflower taller than Ben himself. "Patience is magic," Grandpa said, patting his shoulder.`
     },
     {
       id: 5,
@@ -44,7 +48,8 @@ const StoriesDB = {
       titleCn: "最好的礼物",
       level: "初级",
       wordCount: 118,
-      content: `It was Mother's Day, and Lucy wanted to give her mom the best gift ever. She checked her piggy bank, but she only had two dollars. That was not enough for a fancy present from the store. Lucy sat at her desk and thought hard. Then she had a wonderful idea. She took out her crayons and drew a beautiful picture of her family having a picnic under a rainbow. Below the picture, she wrote in her best handwriting: "I love you more than all the stars in the sky." When her mother opened the handmade card, tears of happiness filled her eyes. She hugged Lucy tightly. "This is the most precious gift I have ever received," she said.`
+      content: ,
+      cnContent: `It was Mother's Day, and Lucy wanted to give her mom the best gift ever. She checked her piggy bank, but she only had two dollars. That was not enough for a fancy present from the store. Lucy sat at her desk and thought hard. Then she had a wonderful idea. She took out her crayons and drew a beautiful picture of her family having a picnic under a rainbow. Below the picture, she wrote in her best handwriting: "I love you more than all the stars in the sky." When her mother opened the handmade card, tears of happiness filled her eyes. She hugged Lucy tightly. "This is the most precious gift I have ever received," she said.`
     },
     {
       id: 6,
@@ -52,7 +57,8 @@ const StoriesDB = {
       titleCn: "善良的机器人",
       level: "中级",
       wordCount: 148,
-      content: `In a bright laboratory, scientist Dr. Lee built a small robot named Bolt. Bolt had shiny metal arms and glowing blue eyes. His job was to help clean the lab. One rainy evening, Bolt noticed a little sparrow with a broken wing hiding under the lab door. The bird could not fly away. Bolt gently picked up the tiny creature and placed it in a warm cardboard box. Every day, Bolt brought seeds and water to the sparrow. Dr. Lee watched this and smiled. "You were built to clean," he said, "but you learned to care. That makes you truly special." After two weeks, the sparrow spread its wings and flew into the blue sky. Bolt waved goodbye, feeling warm inside his metal chest.`
+      content: ,
+      cnContent: `In a bright laboratory, scientist Dr. Lee built a small robot named Bolt. Bolt had shiny metal arms and glowing blue eyes. His job was to help clean the lab. One rainy evening, Bolt noticed a little sparrow with a broken wing hiding under the lab door. The bird could not fly away. Bolt gently picked up the tiny creature and placed it in a warm cardboard box. Every day, Bolt brought seeds and water to the sparrow. Dr. Lee watched this and smiled. "You were built to clean," he said, "but you learned to care. That makes you truly special." After two weeks, the sparrow spread its wings and flew into the blue sky. Bolt waved goodbye, feeling warm inside his metal chest.`
     },
     {
       id: 7,
@@ -60,7 +66,8 @@ const StoriesDB = {
       titleCn: "小星星",
       level: "初级",
       wordCount: 132,
-      content: `High up in the night sky, there lived a little star named Twinkle. She was the smallest star in the entire galaxy, and she felt invisible. All the big bright stars shone so beautifully, while her own light was faint and weak. One dark night, a lonely ship sailed on a vast ocean. The captain could not see anything in the thick fog. "If only we had some light to guide us," he sighed. Suddenly, the captain spotted a tiny but steady glow in the sky. It was Twinkle! Following her gentle light, the ship found its way safely home. Twinkle realized that even the smallest light can make a big difference when someone needs it most.`
+      content: ,
+      cnContent: `High up in the night sky, there lived a little star named Twinkle. She was the smallest star in the entire galaxy, and she felt invisible. All the big bright stars shone so beautifully, while her own light was faint and weak. One dark night, a lonely ship sailed on a vast ocean. The captain could not see anything in the thick fog. "If only we had some light to guide us," he sighed. Suddenly, the captain spotted a tiny but steady glow in the sky. It was Twinkle! Following her gentle light, the ship found its way safely home. Twinkle realized that even the smallest light can make a big difference when someone needs it most.`
     },
     {
       id: 8,
@@ -68,7 +75,8 @@ const StoriesDB = {
       titleCn: "勇敢的小老鼠",
       level: "中级",
       wordCount: 162,
-      content: `In an old country house, a tiny mouse named Milo lived quietly behind the kitchen wall. All the other mice were terrified of Whiskers, the fierce farm cat. One autumn morning, the farmer's little daughter accidentally dropped her golden locket down a deep crack in the floor. The girl cried bitterly because the locket held her grandmother's photo. The crack was too narrow for any human hand. Milo watched from his hole. His heart beat fast, but he scurried forward bravely. He squeezed his small body into the dark crack. Down, down he climbed until his whiskers touched something cold and smooth. It was the locket! With great effort, Milo pushed it back up to the light. The girl squealed with delight and gave Milo a whole piece of cheese. From that day, Whiskers was told to leave Milo alone.`
+      content: ,
+      cnContent: `In an old country house, a tiny mouse named Milo lived quietly behind the kitchen wall. All the other mice were terrified of Whiskers, the fierce farm cat. One autumn morning, the farmer's little daughter accidentally dropped her golden locket down a deep crack in the floor. The girl cried bitterly because the locket held her grandmother's photo. The crack was too narrow for any human hand. Milo watched from his hole. His heart beat fast, but he scurried forward bravely. He squeezed his small body into the dark crack. Down, down he climbed until his whiskers touched something cold and smooth. It was the locket! With great effort, Milo pushed it back up to the light. The girl squealed with delight and gave Milo a whole piece of cheese. From that day, Whiskers was told to leave Milo alone.`
     },
     {
       id: 9,
@@ -76,7 +84,8 @@ const StoriesDB = {
       titleCn: "彩虹桥",
       level: "中级",
       wordCount: 145,
-      content: `After a heavy summer storm, the village children ran outside to play. They stopped and gasped at the sight before them. A magnificent rainbow arched across the sky, its colors vivid and bright. Little Mei pointed at the hill beyond the river. "Look! The rainbow ends right there! Let's find the treasure!" The children raced across the meadow, their feet splashing through puddles. When they reached the foot of the hill, they found no pot of gold. Instead, they discovered something even better. The storm had washed away an old stone wall, revealing a hidden grove of wild strawberry bushes heavy with sweet red fruit. The children laughed and shared the delicious berries. Mei smiled. "The real treasure was the adventure itself."`
+      content: ,
+      cnContent: `After a heavy summer storm, the village children ran outside to play. They stopped and gasped at the sight before them. A magnificent rainbow arched across the sky, its colors vivid and bright. Little Mei pointed at the hill beyond the river. "Look! The rainbow ends right there! Let's find the treasure!" The children raced across the meadow, their feet splashing through puddles. When they reached the foot of the hill, they found no pot of gold. Instead, they discovered something even better. The storm had washed away an old stone wall, revealing a hidden grove of wild strawberry bushes heavy with sweet red fruit. The children laughed and shared the delicious berries. Mei smiled. "The real treasure was the adventure itself."`
     },
     {
       id: 10,
@@ -84,7 +93,8 @@ const StoriesDB = {
       titleCn: "秘密花园",
       level: "中级",
       wordCount: 158,
-      content: `Behind her grandmother's cottage, Anna found a rusty iron key under an old stone. Curious, she searched the overgrown backyard until she found a small wooden door covered in thick ivy. The key fit perfectly! Behind the door lay a forgotten garden. Wild roses climbed the crumbling walls, lavender filled the air with sweetness, and butterflies danced in the afternoon sun. But the garden was dry and thirsty. Every day that summer, Anna carried water from the well and pulled out weeds. Slowly, the flowers perked up and bloomed brighter than ever. On Grandmother's birthday, Anna led her through the ivy door. The old woman gasped with wonder. "This was my secret garden when I was a girl," she whispered, tears in her eyes. "I thought I had lost it forever."`
+      content: ,
+      cnContent: `Behind her grandmother's cottage, Anna found a rusty iron key under an old stone. Curious, she searched the overgrown backyard until she found a small wooden door covered in thick ivy. The key fit perfectly! Behind the door lay a forgotten garden. Wild roses climbed the crumbling walls, lavender filled the air with sweetness, and butterflies danced in the afternoon sun. But the garden was dry and thirsty. Every day that summer, Anna carried water from the well and pulled out weeds. Slowly, the flowers perked up and bloomed brighter than ever. On Grandmother's birthday, Anna led her through the ivy door. The old woman gasped with wonder. "This was my secret garden when I was a girl," she whispered, tears in her eyes. "I thought I had lost it forever."`
     },
     {
       id: 11,
@@ -92,7 +102,8 @@ const StoriesDB = {
       titleCn: "我的新鞋子",
       level: "初级",
       wordCount: 98,
-      content: `Today is a very special day for Sam. His mother bought him a new pair of red shoes. They are bright and shiny. Sam put them on and ran around the living room. "They are so light and fast!" he shouted with joy. He ran outside to show his friends. Billy and Kate looked at his new shoes. "Wow, they are beautiful!" Billy said. Sam smiled proudly. They all played tag in the park together. Sam ran faster than ever before. At bedtime, Sam took off his shoes and placed them carefully by his bed. "Thank you, Mom," he whispered. He could not wait to wear them again tomorrow.`
+      content: ,
+      cnContent: `Today is a very special day for Sam. His mother bought him a new pair of red shoes. They are bright and shiny. Sam put them on and ran around the living room. "They are so light and fast!" he shouted with joy. He ran outside to show his friends. Billy and Kate looked at his new shoes. "Wow, they are beautiful!" Billy said. Sam smiled proudly. They all played tag in the park together. Sam ran faster than ever before. At bedtime, Sam took off his shoes and placed them carefully by his bed. "Thank you, Mom," he whispered. He could not wait to wear them again tomorrow.`
     },
     {
       id: 12,
@@ -100,7 +111,8 @@ const StoriesDB = {
       titleCn: "饥饿的小鸟",
       level: "初级",
       wordCount: 112,
-      content: `A little blue bird woke up early one spring morning. Her tummy was making a loud rumbling sound. She was very hungry. She flew from branch to branch, looking for something to eat. She found a few small seeds on the ground, but a squirrel grabbed them first. She felt sad. Then she saw a bright red berry bush near the old fence. She flew over and ate one sweet berry. Then another, and another! The berries were so juicy and delicious. Her tummy was full and happy. She sang a beautiful song to thank the berry bush. A gentle wind blew through the leaves, and the bird knew it was going to be a lovely day.`
+      content: ,
+      cnContent: `A little blue bird woke up early one spring morning. Her tummy was making a loud rumbling sound. She was very hungry. She flew from branch to branch, looking for something to eat. She found a few small seeds on the ground, but a squirrel grabbed them first. She felt sad. Then she saw a bright red berry bush near the old fence. She flew over and ate one sweet berry. Then another, and another! The berries were so juicy and delicious. Her tummy was full and happy. She sang a beautiful song to thank the berry bush. A gentle wind blew through the leaves, and the bird knew it was going to be a lovely day.`
     },
     {
       id: 13,
@@ -108,7 +120,8 @@ const StoriesDB = {
       titleCn: "晴朗的一天",
       level: "初级",
       wordCount: 105,
-      content: `It was a warm and sunny Saturday. Lily and her brother Max decided to have a picnic in the garden. Max packed some sandwiches and juice boxes. Lily brought her favorite teddy bear and a colorful blanket. They spread the blanket under the big apple tree. The grass was soft and green. A yellow butterfly landed on Lily's hand. She giggled softly so she would not scare it away. Max shared his sandwich with a friendly ant. After lunch, they lay on the blanket and watched the white clouds move slowly across the blue sky. "This is the best day ever," Lily said, holding her brother's hand.`
+      content: ,
+      cnContent: `It was a warm and sunny Saturday. Lily and her brother Max decided to have a picnic in the garden. Max packed some sandwiches and juice boxes. Lily brought her favorite teddy bear and a colorful blanket. They spread the blanket under the big apple tree. The grass was soft and green. A yellow butterfly landed on Lily's hand. She giggled softly so she would not scare it away. Max shared his sandwich with a friendly ant. After lunch, they lay on the blanket and watched the white clouds move slowly across the blue sky. "This is the best day ever," Lily said, holding her brother's hand.`
     },
     {
       id: 14,
@@ -116,7 +129,8 @@ const StoriesDB = {
       titleCn: "红气球",
       level: "初级",
       wordCount: 118,
-      content: `At the town fair, Dad bought Emma a big red balloon. It was as round as the moon and brighter than a cherry. Emma held the string tightly with her small hand. She walked carefully so the balloon would not touch any sharp corners. Suddenly, a strong gust of wind blew. The string slipped from her fingers! "Oh no!" Emma cried. The red balloon floated higher and higher into the sky. Emma's eyes filled with tears. Dad knelt down and wiped her cheek. "Look, Emma," he said softly. The balloon was dancing with the white clouds. "It is going on an adventure. Maybe it will visit the moon." Emma smiled. She waved goodbye to her brave little balloon.`
+      content: ,
+      cnContent: `At the town fair, Dad bought Emma a big red balloon. It was as round as the moon and brighter than a cherry. Emma held the string tightly with her small hand. She walked carefully so the balloon would not touch any sharp corners. Suddenly, a strong gust of wind blew. The string slipped from her fingers! "Oh no!" Emma cried. The red balloon floated higher and higher into the sky. Emma's eyes filled with tears. Dad knelt down and wiped her cheek. "Look, Emma," he said softly. The balloon was dancing with the white clouds. "It is going on an adventure. Maybe it will visit the moon." Emma smiled. She waved goodbye to her brave little balloon.`
     },
     {
       id: 15,
@@ -124,7 +138,8 @@ const StoriesDB = {
       titleCn: "小兔子",
       level: "初级",
       wordCount: 102,
-      content: `In a soft grassy meadow, a baby rabbit named Coco opened her eyes for the very first time. Everything was new and wonderful. She saw green grass, yellow flowers, and a bright blue sky. Coco tried to stand on her tiny legs. She wobbled and fell, but she tried again. Her mother watched with warm, proud eyes. "Take your time, little one," she said. Coco hopped forward one small step. Then another. Soon she was hopping around the meadow like a happy spring. She found a crunchy carrot and nibbled it with her small white teeth. It was the tastiest thing she had ever eaten. Coco was ready to explore the big, beautiful world.`
+      content: ,
+      cnContent: `In a soft grassy meadow, a baby rabbit named Coco opened her eyes for the very first time. Everything was new and wonderful. She saw green grass, yellow flowers, and a bright blue sky. Coco tried to stand on her tiny legs. She wobbled and fell, but she tried again. Her mother watched with warm, proud eyes. "Take your time, little one," she said. Coco hopped forward one small step. Then another. Soon she was hopping around the meadow like a happy spring. She found a crunchy carrot and nibbled it with her small white teeth. It was the tastiest thing she had ever eaten. Coco was ready to explore the big, beautiful world.`
     }
   ],
 

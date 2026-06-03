@@ -246,6 +246,73 @@ const App = {
         tooltip.classList.remove('show');
       }
     });
+
+    // 查看翻译 / 收起翻译
+    const btnToggleTranslation = document.getElementById('btnToggleTranslation');
+    const btnHideTranslation = document.getElementById('btnHideTranslation');
+    const storyTranslation = document.getElementById('storyTranslation');
+
+    if (btnToggleTranslation && storyTranslation) {
+      btnToggleTranslation.addEventListener('click', () => {
+        storyTranslation.style.display = 'block';
+        btnToggleTranslation.style.display = 'none';
+        // 自动滚动到翻译区域
+        storyTranslation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+    if (btnHideTranslation && storyTranslation && btnToggleTranslation) {
+      btnHideTranslation.addEventListener('click', () => {
+        storyTranslation.style.display = 'none';
+        btnToggleTranslation.style.display = 'inline-flex';
+      });
+    }
+
+    // 故事操作按钮
+    const btnStoryDone = document.getElementById('btnStoryDone');
+    const btnStoryMastered = document.getElementById('btnStoryMastered');
+    const btnStoryReview = document.getElementById('btnStoryReview');
+
+    if (btnStoryDone) {
+      btnStoryDone.addEventListener('click', () => {
+        btnStoryDone.classList.add('clicked');
+        this.showToast('✅ 已标记为读完，继续加油！');
+        // 记录到成长笔记
+        if (this.currentStory) {
+          this.state.growthNotes.push({
+            text: `读完了英文故事《${this.currentStory.titleCn}》`,
+            time: new Date().toISOString()
+          });
+          this.saveState();
+        }
+      });
+    }
+
+    if (btnStoryMastered) {
+      btnStoryMastered.addEventListener('click', () => {
+        btnStoryMastered.classList.add('clicked');
+        this.showToast('🎉 太棒了！你已经掌握了这个故事～');
+        if (this.currentStory) {
+          this.state.growthNotes.push({
+            text: `掌握了英文故事《${this.currentStory.titleCn}》`,
+            time: new Date().toISOString()
+          });
+          this.saveState();
+        }
+      });
+    }
+
+    if (btnStoryReview) {
+      btnStoryReview.addEventListener('click', () => {
+        btnStoryReview.classList.add('clicked');
+        this.showToast('📌 已标记，明天会优先推送这篇故事给你复习！');
+        // 保存到本地标记列表
+        const reviewList = JSON.parse(localStorage.getItem('dc_review_stories') || '[]');
+        if (this.currentStory && !reviewList.includes(this.currentStory.id)) {
+          reviewList.push(this.currentStory.id);
+          localStorage.setItem('dc_review_stories', JSON.stringify(reviewList));
+        }
+      });
+    }
   },
 
   // ========== 定时调度器 ==========
@@ -1073,6 +1140,27 @@ const App = {
     `;
 
     this.renderStoryContent(story.content);
+
+    // 设置翻译内容（默认隐藏）
+    const translationBody = document.getElementById('translationBody');
+    const storyTranslation = document.getElementById('storyTranslation');
+    const btnToggleTranslation = document.getElementById('btnToggleTranslation');
+    if (translationBody) translationBody.textContent = story.cnContent || '暂无翻译';
+    if (storyTranslation) storyTranslation.style.display = 'none';
+    if (btnToggleTranslation) {
+      btnToggleTranslation.style.display = 'inline-flex';
+      btnToggleTranslation.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+        查看翻译
+      `;
+    }
+
+    // 重置操作按钮状态
+    document.querySelectorAll('.story-action-btn').forEach(btn => btn.classList.remove('clicked'));
+
     this.updateStoryProgress(0);
   },
 
