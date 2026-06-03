@@ -3,7 +3,7 @@
  * 缓存核心资源，支持离线访问
  */
 
-const CACHE_NAME = 'daily-companion-v1';
+const CACHE_NAME = 'daily-companion-v2';
 const urlsToCache = [
   '/daily-companion/',
   '/daily-companion/index.html',
