@@ -3,15 +3,15 @@
  * 缓存核心资源，支持离线访问
  */
 
-const CACHE_NAME = 'daily-companion-v2';
+const CACHE_NAME = 'daily-companion-v5';
 const urlsToCache = [
   '/daily-companion/',
   '/daily-companion/index.html',
-  '/daily-companion/style.css',
-  '/daily-companion/app.js',
-  '/daily-companion/knowledge.js',
-  '/daily-companion/sound.js',
-  '/daily-companion/manifest.json',
+  '/daily-companion/style.css?v=5',
+  '/daily-companion/app.js?v=5',
+  '/daily-companion/knowledge.js?v=5',
+  '/daily-companion/sound.js?v=5',
+  '/daily-companion/manifest.json?v=5',
   '/daily-companion/icon-192.png',
   '/daily-companion/icon-512.png'
 ];
@@ -25,7 +25,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 激活：清理旧缓存
+// 激活：清理所有旧缓存，确保新版本立即生效
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -38,29 +38,51 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 拦截请求：优先从缓存读取，网络作为后备
+// 拦截请求：对核心资源使用网络优先，确保总是获取最新版本
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // 核心资源（HTML/JS/CSS/JSON）：网络优先，失败时回退缓存
+  const isCoreAsset = url.pathname.endsWith('.html') ||
+                      url.pathname.endsWith('.css') ||
+                      url.pathname.endsWith('.js') ||
+                      url.pathname.endsWith('.json');
+
+  if (isCoreAsset) {
+    event.respondWith(
+      fetch(request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        return caches.match(request);
+      })
+    );
+    return;
+  }
+
+  // 其他资源（图片等）：缓存优先
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // 缓存命中则直接返回
+    caches.match(request).then((response) => {
       if (response) {
         return response;
       }
-      // 否则发起网络请求
-      return fetch(event.request).then((networkResponse) => {
-        // 不缓存非成功响应或跨域请求
+      return fetch(request).then((networkResponse) => {
         if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
           return networkResponse;
         }
-        // 将新资源加入缓存
         const responseToCache = networkResponse.clone();
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+          cache.put(request, responseToCache);
         });
         return networkResponse;
       });
     }).catch(() => {
-      // 离线且无缓存时的兜底
       return new Response('离线中，请连接网络后重试～', {
         status: 503,
         statusText: 'Service Unavailable',
