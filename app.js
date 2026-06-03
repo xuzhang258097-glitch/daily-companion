@@ -242,7 +242,7 @@ const App = {
     else greeting = '晚上好';
 
     const messages = [
-      `${greeting}！我是 <strong>小伴</strong>，你的全天候陪伴助手 ✨`,
+      `${greeting}！我是 <strong>小咪</strong>，你的全天候陪伴助手 ✨`,
       `我会每天准时陪你聊天、推送知识、记录待办、晚间复盘。`,
       `现在时间是 <strong>${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</strong>，让我们一起度过美好的一天吧～`
     ];
@@ -270,7 +270,7 @@ const App = {
 
     // 主动发起对话
     setTimeout(() => {
-      this.sendAIMessage('🌅 早上好！新的一天开始了，小伴来陪你开启晨间学习时光～');
+      this.sendAIMessage('🌅 早上好！新的一天开始了，小咪来陪你开启晨间学习时光～');
       SoundSystem.playMessage();
     }, 500);
 
@@ -393,7 +393,7 @@ const App = {
     this.state.todoDone = true;
     this.state.currentFlow = 'idle';
     this.saveState();
-    this.setQuickReplies(['谢谢小伴！', '查看待办']);
+    this.setQuickReplies(['谢谢小咪！', '查看待办']);
   },
 
   // ========== 晚间复盘流程 ==========
@@ -441,7 +441,7 @@ const App = {
 
       setTimeout(() => {
         this.sendAIMessage('今天的陪伴就到这里啦。好好休息，明天见！🌟');
-        this.setQuickReplies(['明天见！', '晚安小伴']);
+        this.setQuickReplies(['明天见！', '晚安小咪']);
       }, 5000);
     } else {
       this.sendAIMessage('晚安！愿你有个好梦，明天我们继续一起进步～ 🌙');
@@ -491,13 +491,13 @@ const App = {
 
     // 3. 问候/打招呼
     if (/^(你好|您好|嗨|hello|hi|在吗|在嘛)\s*[.!?！？]*$/i.test(text)) {
-      this.sendAIMessage('你好呀！我是小伴，有什么我可以帮你的吗？😊');
+      this.sendAIMessage('你好呀！我是小咪，有什么我可以帮你的吗？😊');
       return;
     }
 
     // 4. 询问能力/身份
     if (/你能做什么|你是谁|你有什么功能|你会什么/.test(text)) {
-      this.sendAIMessage('我是 <strong>小伴</strong>，你的全天候陪伴助手！我可以：<br>📖 每天推送知识卡片（单词、科技、历史、影视）<br>📝 帮你记录和管理待办事项<br>🌙 晚间陪你复盘成长<br>💬 随时陪你聊天<br><br>试试输入「知识」或「待办」体验一下吧～');
+      this.sendAIMessage('我是 <strong>小咪</strong>，你的全天候陪伴助手！我可以：<br>📖 每天推送知识卡片（单词、科技、历史、影视）<br>📝 帮你记录和管理待办事项<br>🌙 晚间陪你复盘成长<br>💬 随时陪你聊天<br><br>试试输入「知识」或「待办」体验一下吧～');
       return;
     }
 
@@ -510,7 +510,7 @@ const App = {
     // 6. 表达负面情绪
     if (/难过|伤心|累|烦|不开心|郁闷|焦虑/.test(text)) {
       this.sendAIMessage('抱抱你 🤗 每个人都有低落的时候，允许自己休息一会儿。如果想聊聊，我随时在听；如果想转移注意力，我可以给你推送一条有趣的知识～');
-      this.setQuickReplies(['推送知识', '我想静静', '谢谢小伴']);
+      this.setQuickReplies(['推送知识', '我想静静', '谢谢小咪']);
       return;
     }
 
