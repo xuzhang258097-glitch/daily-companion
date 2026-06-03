@@ -1099,17 +1099,113 @@ body {
 /* ============================================
    响应式
    ============================================ */
+
+/* 移动端菜单按钮（默认隐藏） */
+.mobile-only {
+  display: none;
+}
+
+/* 移动端侧边栏遮罩 */
+.side-panel-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.side-panel-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
 @media (max-width: 900px) {
+  .mobile-only {
+    display: flex;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .top-bar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    height: 52px;
+    padding: 0 14px;
+  }
+
+  .main-container {
+    flex-direction: column;
+    padding: 72px 8px 8px;
+    height: auto;
+    min-height: 100vh;
+    gap: 12px;
+  }
+
   .side-panel {
     position: fixed;
-    left: -300px;
-    top: 80px;
-    bottom: 16px;
+    left: -320px;
+    top: 72px;
+    bottom: 8px;
+    width: 280px;
+    min-width: 280px;
     z-index: 50;
     transition: left 0.4s var(--ease-out);
   }
+
   .side-panel.open {
-    left: 16px;
+    left: 8px;
+  }
+
+  .chat-area {
+    min-height: calc(100vh - 88px);
+  }
+
+  .chat-messages {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .message-bubble {
+    max-width: 85%;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+  }
+
+  .message.system .message-bubble {
+    max-width: 92vw;
+  }
+
+  .chat-input-area {
+    padding: 10px 14px;
+  }
+
+  .modal {
+    width: 92vw;
+    max-height: 85vh;
+  }
+
+  .modal-large {
+    width: 95vw;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .toast-container {
+    top: 68px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .toast {
+    max-width: 100%;
   }
 }
 

@@ -3,6 +3,17 @@
  * 全天候主动陪伴 · 晨间知识 · 待办追踪 · 晚间复盘
  */
 
+// 音效系统兜底（防止 sound.js 加载失败导致崩溃）
+if (typeof SoundSystem === 'undefined') {
+  window.SoundSystem = {
+    enabled: false,
+    init() {}, resume() {}, toggle() { return false; },
+    playChime() {}, playMessage() {}, playSend() {},
+    playSuccess() {}, playCheck() {}, playOpen() {},
+    playClose() {}, playError() {}, playAmbient() {}
+  };
+}
+
 const App = {
   // ========== 状态 ==========
   state: {
@@ -75,8 +86,10 @@ const App = {
   initUI() {
     // 音效开关
     const soundBtn = document.getElementById('soundToggle');
-    if (!SoundSystem.enabled) soundBtn.classList.remove('active');
-    else soundBtn.classList.add('active');
+    if (typeof SoundSystem !== 'undefined') {
+      if (!SoundSystem.enabled) soundBtn.classList.remove('active');
+      else soundBtn.classList.add('active');
+    }
 
     // 渲染待办
     this.renderTodos();
@@ -138,6 +151,21 @@ const App = {
       });
     });
 
+    // 移动端侧边栏切换
+    const btnMenu = document.getElementById('btnMenu');
+    const sidePanel = document.getElementById('sidePanel');
+    const sidePanelOverlay = document.getElementById('sidePanelOverlay');
+    if (btnMenu && sidePanel && sidePanelOverlay) {
+      btnMenu.addEventListener('click', () => {
+        sidePanel.classList.toggle('open');
+        sidePanelOverlay.classList.toggle('show');
+      });
+      sidePanelOverlay.addEventListener('click', () => {
+        sidePanel.classList.remove('open');
+        sidePanelOverlay.classList.remove('show');
+      });
+    }
+
     // 点击遮罩关闭弹窗
     document.getElementById('todoModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) this.closeTodoModal();
@@ -193,10 +221,16 @@ const App = {
   },
 
   updateLiveTime() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('liveTime').textContent = timeStr;
-    document.getElementById('currentTime').textContent = timeStr;
+    try {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const liveTimeEl = document.getElementById('liveTime');
+      const currentTimeEl = document.getElementById('currentTime');
+      if (liveTimeEl) liveTimeEl.textContent = timeStr;
+      if (currentTimeEl) currentTimeEl.textContent = timeStr;
+    } catch (e) {
+      // 静默处理，避免定时器崩溃
+    }
   },
 
   // ========== 欢迎回来 ==========
