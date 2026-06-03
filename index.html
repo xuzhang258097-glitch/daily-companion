@@ -2,8 +2,16 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#7C5CFC">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="每日陪伴">
+  <meta name="description" content="你的全天候陪伴助手 — 晨间知识、待办追踪、晚间复盘">
   <title>Daily Companion · 每日陪伴</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -210,5 +218,15 @@
   <script src="knowledge.js"></script>
   <script src="sound.js"></script>
   <script src="app.js"></script>
+  <script>
+    // 注册 Service Worker，支持 PWA 离线访问
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then((reg) => console.log('SW 注册成功:', reg.scope))
+          .catch((err) => console.log('SW 注册失败:', err));
+      });
+    }
+  </script>
 </body>
 </html>
